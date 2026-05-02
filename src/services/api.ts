@@ -364,3 +364,39 @@ export const useResetSettings = () => {
     },
   });
 };
+
+// ---------------------------------------------------------
+// Auth API Hooks
+// ---------------------------------------------------------
+
+export const useSendPasswordOtp = () => {
+  return useMutation({
+    mutationFn: async (email: string) => {
+      const response = await apiClient.post<{ success: boolean; message: string }>('/api/admin/auth/password/send-otp', { email });
+      return response;
+    },
+    onSuccess: () => {
+      showSuccessToast('OTP sent to your email!');
+    },
+    onError: (error: any) => {
+      const errorMessage = error.data?.message || error.message || 'Failed to send OTP';
+      showErrorToast(errorMessage);
+    },
+  });
+};
+
+export const useResetPassword = () => {
+  return useMutation({
+    mutationFn: async (data: { email: string; newPassword: string; otp: string }) => {
+      const response = await apiClient.post<{ success: boolean; message: string }>('/api/admin/auth/password/reset', data);
+      return response;
+    },
+    onSuccess: () => {
+      showSuccessToast('Password reset successfully! Please login with your new password.');
+    },
+    onError: (error: any) => {
+      const errorMessage = error.data?.message || error.message || 'Failed to reset password';
+      showErrorToast(errorMessage);
+    },
+  });
+};
