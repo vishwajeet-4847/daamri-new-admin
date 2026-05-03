@@ -76,5 +76,14 @@ export const apiClient = {
     method: 'PATCH',
     body: data instanceof FormData ? data : JSON.stringify(data)
   }),
-  delete: <T>(endpoint: string, options?: RequestInit) => request<T>(endpoint, { ...options, method: 'DELETE' })
+ delete: <T>(endpoint: string, options?: RequestInit & { data?: any }) =>
+  request<T>(endpoint, {
+    ...options,
+    method: 'DELETE',
+    body: options?.data ? JSON.stringify(options.data) : undefined,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options?.headers || {}),
+    },
+  })
 };

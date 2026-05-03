@@ -124,12 +124,14 @@ export const useDeleteProperty = () => {
 export const useDeletePropertyMedia = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, type, images }: { id: string; type: 'cover-image' | 'brochure' | 'gallery'; images?: string[] }) => {
+    mutationFn: async ({ id, type, images }: { id: string; type: 'cover-image' | 'video' | 'brochure' | 'gallery'; images?: string[] }) => {
+
+      console.log('Deleting media with params:', { id, type, images });
       if (type === 'gallery') {
         await apiClient.delete(`/api/admin/properties/${id}/gallery`, { data: { images } });
       } else {
         await apiClient.delete(`/api/admin/properties/${id}/${type}`);
-      }
+      } 
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
@@ -261,7 +263,7 @@ export const useDeleteProject = () => {
 export const useDeleteProjectMedia = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, type, images }: { id: string; type: 'cover-image' | 'brochure' | 'gallery'; images?: string[] }) => {
+    mutationFn: async ({ id, type, images }: { id: string; type: 'cover-image' | 'video' | 'brochure' | 'gallery'; images?: string[] }) => {
       if (type === 'gallery') {
         await apiClient.delete(`/api/admin/projects/${id}/gallery`, { data: { images } });
       } else {

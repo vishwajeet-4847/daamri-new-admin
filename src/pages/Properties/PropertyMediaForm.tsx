@@ -43,7 +43,7 @@ export default function PropertyMediaForm({ propertyId, onClose }: PropertyMedia
     }
   };
 
-  const handleDelete = async (type: 'cover-image' | 'brochure' | 'gallery', images?: string[]) => {
+  const handleDelete = async (type: 'cover-image' | 'video' | 'brochure' | 'gallery', images?: string[]) => {
     if (confirm(`Are you sure you want to delete this ${type}?`)) {
       try {
         await deleteMedia.mutateAsync({ id: propertyId, type, images });
@@ -124,7 +124,7 @@ export default function PropertyMediaForm({ propertyId, onClose }: PropertyMedia
                     <span className="text-[10px] font-bold text-slate-600 block">Video</span>
                   </div>
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button onClick={() => handleDelete('brochure')} className="p-2 bg-white text-rose-600 rounded-lg shadow-lg hover:scale-110 transition-transform">
+                    <button onClick={() => handleDelete('video')} className="p-2 bg-white text-rose-600 rounded-lg shadow-lg hover:scale-110 transition-transform">
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>

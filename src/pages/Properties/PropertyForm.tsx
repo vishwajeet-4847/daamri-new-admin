@@ -5,6 +5,23 @@ import { useCreateProperty, useUpdateProperty } from '../../services/api';
 import { Property } from '../../types';
 import { PROPERTY_CATEGORIES, PropertyTypeKey } from '../../constants/propertyCategories';
 
+// Categories that support BHK configuration
+const CATEGORIES_WITH_CONFIGURATION = ['flat', 'penthouse', 'house_villa'];
+
+// BHK options for configuration
+const BHK_OPTIONS = [
+  { value: '1RK', label: '1RK' },
+  { value: '1BHK', label: '1BHK' },
+  { value: '2BHK', label: '2BHK' },
+  { value: '3BHK', label: '3BHK' },
+  { value: '4BHK', label: '4BHK' },
+  { value: '5BHK+', label: '5BHK+' },
+];
+
+const doesCategorySupportConfiguration = (category: string): boolean => {
+  return CATEGORIES_WITH_CONFIGURATION.includes(category);
+};
+
 interface PropertyFormProps {
   onClose: () => void;
   onSuccess: (id?: string) => void;
@@ -78,6 +95,17 @@ export default function PropertyForm({ onClose, onSuccess, initialData }: Proper
         const firstSubcategory = PROPERTY_CATEGORIES[normalizedValue as PropertyTypeKey]?.subcategories[0];
         if (firstSubcategory) {
           updated.category = firstSubcategory.value;
+          // Reset configuration if new category doesn't support it
+          if (!doesCategorySupportConfiguration(firstSubcategory.value)) {
+            updated.configuration = '';
+          }
+        }
+      }
+
+      // When category changes, reset configuration if new category doesn't support it
+      if (name === 'category') {
+        if (!doesCategorySupportConfiguration(normalizedValue)) {
+          updated.configuration = '';
         }
       }
 
@@ -197,10 +225,17 @@ export default function PropertyForm({ onClose, onSuccess, initialData }: Proper
                 </select>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">Configuration</label>
-                <input required name="configuration" value={formData.configuration} onChange={handleChange} type="text" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-500" placeholder="e.g. 4BHK" />
-              </div>
+              {doesCategorySupportConfiguration(formData.category) && (
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">Configuration</label>
+                  <select name="configuration" value={formData.configuration} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-500 bg-white">
+                    <option value="">Select Configuration</option>
+                    {BHK_OPTIONS.map(({ value, label }) => (
+                      <option key={value} value={value}>{label}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               <div className="space-y-1.5 md:col-span-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">Area</label>

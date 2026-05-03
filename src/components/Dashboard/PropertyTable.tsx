@@ -58,7 +58,7 @@ export function PropertyTable() {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="text-sm font-bold text-slate-900">${property.price?.toLocaleString()}</span>
+                  <span className="text-sm font-bold text-slate-900">₹{property.price?.toLocaleString()}</span>
                 </td>
                 <td className="px-6 py-4 text-center">
                   <span className={cn(
