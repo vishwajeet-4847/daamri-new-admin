@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Property, Project, Activity } from '../types';
+import { Property, Project, Activity,User } from '../types';
 import { apiClient } from '../lib/apiClient';
 import { showErrorToast, showSuccessToast } from '../lib/toastNotification';
 
@@ -399,6 +399,99 @@ export const useResetPassword = () => {
     onError: (error: any) => {
       const errorMessage = error.data?.message || error.message || 'Failed to reset password';
       showErrorToast(errorMessage);
+    },
+  });
+};
+
+
+// users
+
+export interface GetUsersParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+export interface GetUsersResponse {
+  success: boolean;
+  data: User[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+export const useGetUsers = (params: GetUsersParams) => {
+  return useQuery<GetUsersResponse>({
+    queryKey: ["users", params],
+
+    queryFn: async (): Promise<GetUsersResponse> => {
+      const query = new URLSearchParams();
+
+      if (params.page) query.append("page", String(params.page));
+      if (params.limit) query.append("limit", String(params.limit));
+      if (params.search) query.append("search", params.search);
+
+      return await apiClient.get<GetUsersResponse>(
+        `/api/admin/users?${query.toString()}`
+      );
+    },
+
+    
+  });
+};
+
+
+export const useToggleUserStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (userId: string) => {
+       await apiClient.patch(
+        `/api/admin/users/${userId}/toggle`
+      );
+      
+    },
+
+    onSuccess: () => {
+      showSuccessToast("User status updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message ||
+        error.message ||
+        "Failed to update user status";
+
+      showErrorToast(message);
+    },
+  });
+};
+
+export const useDeleteUser = () => {
+
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (userId: string) => {
+ await apiClient.delete(
+        `/api/admin/users/${userId}`
+      );
+    
+    },
+
+    onSuccess: () => {
+      showSuccessToast("User deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message ||
+        error.message ||
+        "Failed to delete user";
+
+      showErrorToast(message);
     },
   });
 };

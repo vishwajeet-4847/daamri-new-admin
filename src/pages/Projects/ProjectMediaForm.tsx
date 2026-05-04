@@ -43,7 +43,7 @@ export default function ProjectMediaForm({ projectId, onClose }: ProjectMediaFor
     }
   };
 
-  const handleDelete = async (type: 'cover-image' | 'brochure' | 'gallery', images?: string[]) => {
+  const handleDelete = async (type: 'cover-image' | 'brochure' | 'gallery' | 'video', images?: string[]) => {
     if (confirm(`Are you sure you want to delete this ${type}?`)) {
       try {
         await deleteMedia.mutateAsync({ id: projectId, type, images });

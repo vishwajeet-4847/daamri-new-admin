@@ -10,6 +10,7 @@ import Login from './pages/Auth/Login';
 import Properties from './pages/Properties';
 import Projects from './pages/Projects';
 import Settings from './pages/Settings';
+import Users from './pages/Users';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -63,6 +64,7 @@ export default function App() {
             <Route index element={<Dashboard />} />
             <Route path="properties" element={<Properties />} />
             <Route path="projects" element={<Projects />} />
+            <Route path='users' element={<Users />} />
             <Route path="settings" element={<Settings />} />
             <Route path="investors" element={<div className="p-8 font-bold text-2xl">Investors Module Coming Soon</div>} />
           </Route>

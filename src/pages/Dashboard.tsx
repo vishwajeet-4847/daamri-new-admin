@@ -15,7 +15,7 @@ import { StatsCard } from '../components/Dashboard/StatsCard';
 import { PropertyTable } from '../components/Dashboard/PropertyTable';
 import { ActivityFeed } from '../components/Dashboard/ActivityFeed';
 import { ProjectCards } from '../components/Dashboard/ProjectCards';
-import { motion } from 'motion/react';
+
 import { useDashboardStats } from '../services/api';
 
 export default function Dashboard() {

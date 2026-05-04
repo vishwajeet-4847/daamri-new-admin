@@ -143,3 +143,36 @@ export interface DashboardStats {
   };
 }
 
+
+export interface User {
+  _id: string;
+
+  /* BASIC INFO */
+  name: string;
+  email: string;
+  phone: string;
+  isVerified: boolean;
+  isActive: boolean;
+  isDeleted: boolean;
+
+
+  /* PROFILE */
+  profile: {
+    city?: string;
+    userType:
+      | "investor"
+      | "channel_partner"
+      | "service_provider"
+      | "seller"
+      | "buyer"
+      | "agent"
+      | "builder"
+      | "other";
+    avatar?: string;
+  };
+
+
+ 
+  createdAt: string;
+  updatedAt: string;
+}

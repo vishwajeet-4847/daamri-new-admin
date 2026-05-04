@@ -9,7 +9,9 @@ import {
   LogOut,
   ChevronRight,
   PlusCircle,
-  Briefcase
+  Briefcase,
+
+  User
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../context/AuthContext';
@@ -18,6 +20,7 @@ const navItems = [
   { icon: BarChart3, label: 'Analytics', path: '/' },
   { icon: Building2, label: 'Properties', path: '/properties' },
   { icon: Briefcase, label: 'Projects', path: '/projects' },
+  { icon: User, label: 'Users', path: '/users' },
   { icon: Users2, label: 'Investors', path: '/investors' },
   { icon: Settings, label: 'Settings', path: '/settings' },
 ];

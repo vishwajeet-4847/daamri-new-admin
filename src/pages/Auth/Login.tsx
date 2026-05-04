@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Building2, Lock, Mail, ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -166,7 +166,7 @@ export default function Login() {
               </button>
             </div>
             <div style={{ textAlign:'right', marginTop:6 }}>
-              <Link to="/reset-password" style={{ fontSize:11, color:'#8a8a90', textDecoration:'none', letterSpacing:'0.05em', cursor:'pointer', transition:'color 0.2s' }} onMouseEnter={e => (e.currentTarget.style.color = '#c9a96e')} onMouseLeave={e => (e.currentTarget.style.color = '#8a8a90')}>Forgot password?</Link>
+              <a href="#" style={{ fontSize:11, color:'#8a8a90', textDecoration:'none', letterSpacing:'0.05em' }}>Forgot password?</a>
             </div>
           </div>
 
