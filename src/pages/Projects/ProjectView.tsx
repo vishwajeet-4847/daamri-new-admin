@@ -2,6 +2,7 @@ import React from 'react';
 import { X, Briefcase, MapPin,  Building2, CheckCircle2, Calendar, Users, Video, FileText } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Project } from '../../types';
+import { toTitleCase, formatPrice } from '../../lib/stringUtils';
 
 interface ProjectViewProps {
   project: Project;
@@ -38,7 +39,12 @@ export default function ProjectView({ project, onClose }: ProjectViewProps) {
                 <h2 className="text-2xl font-bold text-white leading-tight">{project.title}</h2>
                 <div className="flex items-center gap-1.5 text-white/80 mt-1">
                   <MapPin className="w-4 h-4" />
-                  <span className="text-sm">{project.location.address}, {project.location.city}</span>
+                  <span className="text-sm">
+                    {[project.location.address, project.location.locality, project.location.city, project.location.state]
+                      .filter(Boolean)
+                      .map(toTitleCase)
+                      .join(', ')}
+                  </span>
                 </div>
               </div>
             </div>
@@ -51,7 +57,7 @@ export default function ProjectView({ project, onClose }: ProjectViewProps) {
                 
                   <span className="text-[10px] font-bold uppercase tracking-wider">Price Range</span>
                 </div>
-                <p className="text-sm font-bold text-slate-900">₹{project.priceRange?.min?.toLocaleString()} - ₹{project.priceRange?.max?.toLocaleString()}</p>
+                <p className="text-sm font-bold text-slate-900">₹{formatPrice(project.priceRange?.min)} - ₹{formatPrice(project.priceRange?.max)}</p>
               </div>
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
                 <div className="flex items-center gap-2 text-slate-500 mb-1">

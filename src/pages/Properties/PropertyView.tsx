@@ -2,6 +2,8 @@ import React from 'react';
 import { X, Building2, MapPin, DollarSign, Ruler, CheckCircle2, Globe, Video, FileText } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Property } from '../../types';
+import { toTitleCase, formatPrice } from '../../lib/stringUtils';
+import { PROPERTY_CATEGORIES, PropertyTypeKey } from '../../constants/propertyCategories';
 
 interface PropertyViewProps {
   property: Property;
@@ -9,6 +11,11 @@ interface PropertyViewProps {
 }
 
 export default function PropertyView({ property, onClose }: PropertyViewProps) {
+  const propertyTypeData = PROPERTY_CATEGORIES[property.proprtyType as PropertyTypeKey];
+  const typeLabel = propertyTypeData?.label || toTitleCase(property.proprtyType);
+  const categoryLabel = propertyTypeData?.subcategories.find(s => s.value === property.category)?.label 
+    || toTitleCase(property.category);
+
   return (
     <>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 no-scrollbar" onClick={onClose}  />
@@ -39,10 +46,10 @@ export default function PropertyView({ property, onClose }: PropertyViewProps) {
                 <div className="flex items-center gap-1.5 text-white/80 mt-1">
                   <MapPin className="w-4 h-4" />
                   <span className="text-sm">
-                    {property.location.address}
-                    {property.location.locality && `, ${property.location.locality}`}
-                    {property.location.city && `, ${property.location.city}`}
-                    {property.location.state && `, ${property.location.state}`}
+                    {[property.location.address, property.location.locality, property.location.city, property.location.state]
+                      .filter(Boolean)
+                      .map(toTitleCase)
+                      .join(', ')}
                   </span>
                 </div>
               </div>
@@ -56,7 +63,7 @@ export default function PropertyView({ property, onClose }: PropertyViewProps) {
                   <DollarSign className="w-4 h-4" />
                   <span className="text-[10px] font-bold uppercase tracking-wider">Price</span>
                 </div>
-                <p className="text-lg font-bold text-slate-900">₹{property.price?.toLocaleString()}</p>
+                <p className="text-lg font-bold text-slate-900">₹{formatPrice(property.price)}</p>
               </div>
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
                 <div className="flex items-center gap-2 text-slate-500 mb-1">
@@ -89,14 +96,14 @@ export default function PropertyView({ property, onClose }: PropertyViewProps) {
                   <Building2 className="w-4 h-4" />
                   <span className="text-[10px] font-bold uppercase tracking-wider">Type</span>
                 </div>
-                <p className="text-lg font-bold text-slate-900">{property.proprtyType}</p>
+                <p className="text-lg font-bold text-slate-900">{typeLabel}</p>
               </div>
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
                 <div className="flex items-center gap-2 text-slate-500 mb-1">
                   <Building2 className="w-4 h-4" />
                   <span className="text-[10px] font-bold uppercase tracking-wider">Category</span>
                 </div>
-                <p className="text-lg font-bold text-slate-900">{property.category}</p>
+                <p className="text-lg font-bold text-slate-900">{categoryLabel}</p>
               </div>
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
                 <div className="flex items-center gap-2 text-slate-500 mb-1">

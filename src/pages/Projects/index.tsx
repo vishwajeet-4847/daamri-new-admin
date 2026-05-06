@@ -7,6 +7,7 @@ import ProjectForm from './ProjectForm';
 import ProjectMediaForm from './ProjectMediaForm';
 import ProjectView from './ProjectView';
 import { Project } from '../../types';
+import { toTitleCase, formatPrice } from '../../lib/stringUtils';
 
 export default function Projects() {
   const { data: projects, isLoading } = useProjects();
@@ -113,15 +114,15 @@ export default function Projects() {
                           <h4 className="text-sm font-bold text-slate-900 leading-tight">{project.title}</h4>
                           <div className="flex items-center gap-2 mt-1">
                             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 uppercase tracking-tight">{project.projectStatus?.replace(/_/g, ' ') || 'Project'}</span>
-                            <span className="text-[10px] text-slate-400 font-medium truncate max-w-[150px]">{project.location?.city}</span>
+                            <span className="text-[10px] text-slate-400 font-medium truncate max-w-[150px]">{toTitleCase(project.location?.city)}</span>
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-sm font-bold text-slate-900">
-                        {project.priceRange?.min && project.priceRange?.max
-                          ? `₹${project.priceRange.min.toLocaleString()} - ₹${project.priceRange.max.toLocaleString()}`
+                        {project.priceRange?.min !== undefined && project.priceRange?.max !== undefined
+                          ? `₹${formatPrice(project.priceRange.min)} - ₹${formatPrice(project.priceRange.max)}`
                           : 'N/A'
                         }
                       </span>

@@ -7,6 +7,8 @@ import PropertyForm from './PropertyForm';
 import PropertyMediaForm from './PropertyMediaForm';
 import PropertyView from './PropertyView';
 import { Property } from '../../types';
+import { toTitleCase, formatPrice } from '../../lib/stringUtils';
+import { PROPERTY_CATEGORIES, PropertyTypeKey } from '../../constants/propertyCategories';
 
 export default function Properties() {
   const { data: properties, isLoading } = useProperties();
@@ -112,15 +114,19 @@ export default function Properties() {
                         <div>
                           <h4 className="text-sm font-bold text-slate-900 leading-tight">{property.title}</h4>
                           <div className="flex items-center gap-2 mt-1">
-                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 uppercase tracking-tight">{property.category}</span>
-                            <span className="text-[10px] text-slate-400 font-medium truncate max-w-[150px]">{property.location?.city}</span>
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 uppercase tracking-tight">
+                              {PROPERTY_CATEGORIES[property.proprtyType as PropertyTypeKey]?.subcategories.find(
+                                s => s.value === property.category
+                              )?.label || toTitleCase(property.category)}
+                            </span>
+                            <span className="text-[10px] text-slate-400 font-medium truncate max-w-[150px]">{toTitleCase(property.location?.city)}</span>
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-col">
-                        <span className="text-sm font-bold text-slate-900">₹{property.price?.toLocaleString()}</span>
+                        <span className="text-sm font-bold text-slate-900">₹{formatPrice(property.price)}</span>
                         <span className="text-[10px] text-slate-500 uppercase">{property.purpose}</span>
                       </div>
                     </td>
